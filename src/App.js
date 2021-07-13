@@ -1,8 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
+import * as Sentry from "@sentry/react";
+import Example from './Example';
+
+function FallbackComponent() {
+  return <div>An error has occurred</div>;
+}
+
+const myFallback = <FallbackComponent />;
 
 function App() {
   return (
+    <Sentry.ErrorBoundary fallback={myFallback} showDialog>
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -18,8 +27,12 @@ function App() {
           Learn React
         </a>
       </header>
+      
+        <Example />
+      
     </div>
+    </Sentry.ErrorBoundary>
   );
 }
 
-export default App;
+export default Sentry.withProfiler(App, { name: "CustomAppName" });
